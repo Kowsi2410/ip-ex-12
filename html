@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Product List</h1>
+    <table id="productTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody id="productTableBody"></tbody>
+    </table>
+
+    <script>
+        window.onload = function() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    displayProducts(this);
+                }
+            };
+            xhttp.open("GET", "products.xml", true);
+            xhttp.send();
+        };
+
+        function displayProducts(xml) {
+            var xmlDoc = xml.responseXML;
+            var products = xmlDoc.getElementsByTagName("product");
+            var tableBody = document.getElementById("productTableBody");
+            for (var i = 0; i < products.length; i++) {
+                var product = products[i];
+                var id = product.getElementsByTagName("id")[0].textContent;
+                var name = product.getElementsByTagName("name")[0].textContent;
+                var price = product.getElementsByTagName("price")[0].textContent;
+                var description = product.getElementsByTagName("description")[0].textContent;
+                var row = "<tr><td>" + id + "</td><td>" + name + "</td><td>" + price + "</td><td>" + description + "</td></tr>";
+                tableBody.innerHTML += row;
+            }
+        }
+    </script>
+</body>
+</html>
